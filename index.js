@@ -1,16 +1,3 @@
-const GOOGLE_APPLICATION_CREDENTIALS = {
-    type: "service_account",
-    project_id: "visionapplication",
-    private_key_id: "ad8d0e1381ab9c2de23900da5e754c7f4bd30742",
-    private_key: "-----BEGIN PRIVATE KEY-----\nMIIEv...",
-    client_email: "visionapi@visionapplication.iam.gserviceaccount.com",
-    client_id: "116934633182584461237",
-    auth_uri: "https://accounts.google.com/o/oauth2/auth",
-    token_uri: "https://oauth2.googleapis.com/token",
-    auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
-    client_x509_cert_url: "https://www.googleapis.com/robot/v1/metadata/x509/visionapi%40visionapplication.iam.gserviceaccount.com",
-    universe_domain: "googleapis.com"
-};
 const express = require('express');
 const multer = require('multer');
 const cors = require("cors");

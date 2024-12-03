@@ -9,6 +9,13 @@ const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 
+
+// Decode and write the credentials file
+const credentials = Buffer.from(process.env.GOOGLE_CREDENTIALS_JSON, 'base64').toString('utf-8');
+const credentialsPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+
+fs.writeFileSync(credentialsPath, credentials);
+
 // Import Gemini API client
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 

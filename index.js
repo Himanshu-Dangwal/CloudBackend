@@ -256,19 +256,19 @@ app.post('/api/upload2', async (req, res) => {
 });
 
 // Helper function to fetch image from Pinterest (simplified)
-const fetchPinterestProfileImage = async (pinterestProfileUrl) => {
-    try {
-        // Example of fetching profile image logic (to be updated based on actual needs)
-        const response = await axios.get(pinterestProfileUrl);
-        const $ = require('cheerio').load(response.data);  // Assuming you're using cheerio for HTML parsing
-        const profileImage = $('img').first().attr('src'); // Example of getting the first image
+// const fetchPinterestProfileImage = async (pinterestProfileUrl) => {
+//     try {
+//         // Example of fetching profile image logic (to be updated based on actual needs)
+//         const response = await axios.get(pinterestProfileUrl);
+//         const $ = require('cheerio').load(response.data);  // Assuming you're using cheerio for HTML parsing
+//         const profileImage = $('img').first().attr('src'); // Example of getting the first image
 
-        return profileImage;
-    } catch (error) {
-        console.error('Error fetching Pinterest profile image:', error);
-        return null;
-    }
-};
+//         return profileImage;
+//     } catch (error) {
+//         console.error('Error fetching Pinterest profile image:', error);
+//         return null;
+//     }
+// };
 
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
@@ -278,12 +278,12 @@ app.get("/", (req, res) => {
     console.log("server running");
 })
 
-setInterval(() => {
-    axios.get('https://cloudbackend-v8lr.onrender.com/')
-        .then(response => {
-            console.log('Pinged backend to keep it alive.');
-        })
-        .catch(error => {
-            console.error('Error pinging backend:', error);
-        });
-}, 2 * 60 * 1000);
+// setInterval(() => {
+//     axios.get('https://cloudbackend-v8lr.onrender.com/')
+//         .then(response => {
+//             console.log('Pinged backend to keep it alive.');
+//         })
+//         .catch(error => {
+//             console.error('Error pinging backend:', error);
+//         });
+// }, 2 * 60 * 1000);

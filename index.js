@@ -274,5 +274,7 @@ app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
 });
 
-
+app.get("/", (req, res) => {
+    console.log("server running");
+})
 

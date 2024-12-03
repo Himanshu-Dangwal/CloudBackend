@@ -155,10 +155,10 @@ app.post('/api/upload', multer().single('image'), async (req, res) => {
 
 // New route for uploading base64 image and analyzing it
 app.post('/api/upload2', async (req, res) => {
-    const { base64Image, pinterestProfileUrl } = req.body;
+    const { base64Image } = req.body;
     console.log(base64Image);
 
-    if (!base64Image && !pinterestProfileUrl) {
+    if (!base64Image) {
         return res.status(400).send({ error: 'Either base64Image or pinterestProfileUrl is required.' });
     }
 
@@ -176,9 +176,9 @@ app.post('/api/upload2', async (req, res) => {
         }
 
         // If Pinterest profile URL is provided, fetch the image URL
-        if (pinterestProfileUrl) {
-            imagePath = await fetchPinterestProfileImage(pinterestProfileUrl);
-        }
+        // if (pinterestProfileUrl) {
+        //     imagePath = await fetchPinterestProfileImage(pinterestProfileUrl);
+        // }
 
         if (!imagePath) {
             return res.status(400).send({ error: 'Unable to fetch image from Pinterest profile.' });

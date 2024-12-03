@@ -286,12 +286,12 @@ app.get("/", (req, res) => {
     res.send("Server running")
 })
 
-// setInterval(() => {
-//     axios.get('https://cloudbackend-v8lr.onrender.com/')
-//         .then(response => {
-//             console.log('Pinged backend to keep it alive.');
-//         })
-//         .catch(error => {
-//             console.error('Error pinging backend:', error);
-//         });
-// }, 2 * 60 * 1000);
+setInterval(() => {
+    axios.get('https://cloudbackend-v8lr.onrender.com')
+        .then(response => {
+            console.log('Pinged backend to keep it alive.');
+        })
+        .catch(error => {
+            console.error('Error pinging backend:', error);
+        });
+}, 2 * 60 * 1000);

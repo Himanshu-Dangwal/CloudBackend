@@ -8,6 +8,8 @@ const dotenv = require('dotenv');
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
+dotenv.config();
+
 
 
 // Decode and write the credentials file
@@ -19,7 +21,6 @@ fs.writeFileSync(credentialsPath, credentials);
 // Import Gemini API client
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 8000;

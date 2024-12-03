@@ -15,7 +15,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8000;
 
 app.use(cors());
 app.use(express.json()); // To parse JSON request bodies
@@ -275,7 +275,7 @@ app.listen(PORT, () => {
 });
 
 app.get("/", (req, res) => {
-    console.log("server running");
+    res.send("Server running")
 })
 
 // setInterval(() => {

@@ -15,7 +15,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 dotenv.config();
 
 const app = express();
-const PORT = 8080;
+const PORT = 8000;
 
 app.use(cors());
 app.use(express.json()); // To parse JSON request bodies
@@ -28,7 +28,7 @@ const visionClient = new vision.ImageAnnotatorClient();
 
 // Initialize Gemini API client
 const genAIKey = process.env.genAIKey
-const genAI = new GoogleGenerativeAI("genAIKey");
+const genAI = new GoogleGenerativeAI(genAIKey);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 // Firestore collection reference
@@ -43,7 +43,7 @@ const generateStory = async (mood) => {
         const result = await model.generateContent(prompt);
         const story = result.response.text();
 
-        console.log('Gemini Response:', story); // Log the generated story
+        // console.log('Gemini Response:', story); // Log the generated story
 
         return story;
     } catch (error) {
@@ -78,15 +78,60 @@ app.post('/api/upload', multer().single('image'), async (req, res) => {
             blobStream.on('error', reject);
         });
 
+        await blob.makePublic();
         // Get the public URL of the uploaded image
         const imageUrl = `https://storage.googleapis.com/${bucketName}/${fileName}`;
-
+        console.log(imageUrl)
         // Analyze image using Google Vision API
-        const [result] = await visionClient.labelDetection(imageUrl);
-        const labels = result.labelAnnotations.map(label => label.description);
+        const [result] = await visionClient.faceDetection(imageUrl);
+        console.log(result);
 
+        // const labels = result.labelAnnotations.map(label => label.description);
+        // console.log(labels);
+        const faces = result.faceAnnotations;
         // Detect mood from labels (basic example)
-        const mood = labels.includes('happy') ? 'Happy' : labels.includes('sad') ? 'Sad' : 'Neutral';
+        // let mood = "neutral";
+        // if (faces.joyLikelihood == "VERY_LIKELY") {
+        //     mood = "happy";
+        // } else if (faces.sorrowLikelihood == "VERY_LIKELY") {
+        //     mood = "sorrow";
+        // } else if (faces.angerLikelihood == "VERY_LIKELY") {
+        //     mood = "anger";
+        // } else {
+        //     mood = "neutral";
+        // }
+
+        let mood = "neutral";
+
+        // Check each likelihood and set mood accordingly
+        if (faces && faces.length > 0) {
+            const face = faces[0]; // Assuming you're analyzing the first face in the result
+
+            if (face.joyLikelihood === "VERY_LIKELY") {
+                mood = "happy";
+            } else if (face.sorrowLikelihood === "VERY_LIKELY") {
+                mood = "sorrow";
+            } else if (face.angerLikelihood === "VERY_LIKELY") {
+                mood = "anger";
+            } else if (face.surpriseLikelihood === "VERY_LIKELY") {
+                mood = "surprised";
+            } else if (face.joyLikelihood === "LIKELY") {
+                mood = "happy";
+            } else if (face.sorrowLikelihood === "LIKELY") {
+                mood = "sorrow";
+            } else if (face.angerLikelihood === "LIKELY") {
+                mood = "anger";
+            } else if (face.surpriseLikelihood === "LIKELY") {
+                mood = "surprised";
+            } else {
+                mood = "neutral"; // Default mood if none are VERY_LIKELY
+            }
+        } else {
+            console.log("No faces detected.");
+        }
+
+        console.log("Detected Mood:", mood);
+
 
         // Generate a random story using Gemini based on the mood
         const story = await generateStory(mood);
@@ -142,11 +187,54 @@ app.post('/api/upload2', async (req, res) => {
         console.log(`Using image: ${imagePath}`);
 
         // Analyze image using Google Vision API
-        const [result] = await visionClient.labelDetection(imagePath);
-        const labels = result.labelAnnotations.map(label => label.description);
+        const [result] = await visionClient.faceDetection(imagePath);
+        console.log(result);
 
+        // const labels = result.labelAnnotations.map(label => label.description);
+        // console.log(labels);
+        const faces = result.faceAnnotations;
         // Detect mood from labels (basic example)
-        const mood = labels.includes('happy') ? 'Happy' : labels.includes('sad') ? 'Sad' : 'Neutral';
+        // let mood = "neutral";
+        // if (faces.joyLikelihood == "VERY_LIKELY") {
+        //     mood = "happy";
+        // } else if (faces.sorrowLikelihood == "VERY_LIKELY") {
+        //     mood = "sorrow";
+        // } else if (faces.angerLikelihood == "VERY_LIKELY") {
+        //     mood = "anger";
+        // } else {
+        //     mood = "neutral";
+        // }
+
+        let mood = "neutral";
+
+        // Check each likelihood and set mood accordingly
+        if (faces && faces.length > 0) {
+            const face = faces[0]; // Assuming you're analyzing the first face in the result
+
+            if (face.joyLikelihood === "VERY_LIKELY") {
+                mood = "happy";
+            } else if (face.sorrowLikelihood === "VERY_LIKELY") {
+                mood = "sorrow";
+            } else if (face.angerLikelihood === "VERY_LIKELY") {
+                mood = "anger";
+            } else if (face.surpriseLikelihood === "VERY_LIKELY") {
+                mood = "surprised";
+            } else if (face.joyLikelihood === "LIKELY") {
+                mood = "happy";
+            } else if (face.sorrowLikelihood === "LIKELY") {
+                mood = "sorrow";
+            } else if (face.angerLikelihood === "LIKELY") {
+                mood = "anger";
+            } else if (face.surpriseLikelihood === "LIKELY") {
+                mood = "surprised";
+            } else {
+                mood = "neutral"; // Default mood if none are VERY_LIKELY
+            }
+        } else {
+            console.log("No faces detected.");
+        }
+
+        console.log("Detected Mood:", mood);
 
         // Generate a random story using Gemini based on the mood
         const story = await generateStory(mood);
